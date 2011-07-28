@@ -42,7 +42,6 @@ struct Shell {
 		cmds["unsetenv"] = builtin::unsetenv;
 		cmds["set"] = builtin::set;
 		cmds["unset"] = builtin::unset;
-		cmds["q"] = builtin::quit; // alias
 
 		if (!::getenv("PS1"))
 			setvar("PS1", "ucsh> ");
