@@ -13,8 +13,7 @@
 
 /*
  * The main_loop() and run_argv() for the ucsh. Note that you
- * still need to setup() the ucsh::Shell first, especially for
- * the PS1 and PS2 environment variables.
+ * need to setup() the ucsh::Shell before args being changed.
  */
 
 namespace ucsh {

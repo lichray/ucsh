@@ -62,7 +62,7 @@ private:
 	static cstr_t prompt(::EditLine* el) {
 		cstr_t s;
 		el_get(el, EL_CLIENTDATA, &s);
-		return parse_var(getenv(s));
+		return parse_var(Shell::getvar(s));
 	}
 
 	EditLine(EditLine const&);

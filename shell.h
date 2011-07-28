@@ -43,11 +43,12 @@ struct Shell {
 		cmds["set"] = builtin::set;
 		cmds["unset"] = builtin::unset;
 		cmds["q"] = builtin::quit; // alias
-	}
 
-	// force set an environment variable
-	static int setenv(cstr_t k, cstr_t v)
-	{ return ::setenv(k, v, 1); }
+		if (!::getenv("PS1"))
+			setvar("PS1", "ucsh> ");
+		if (!::getenv("PS2"))
+			setvar("PS2", "? ");
+	}
 
 	// gets an environment variable, fallbacks to empty string
 	static cstr_t getenv(cstr_t k) {
@@ -55,6 +56,7 @@ struct Shell {
 		return v ? v : _ws;
 	}
 
+	// sets/unsets an internal shell variable
 	static int setvar(cstr_t k, cstr_t v)
 	{ return v ? (vars[k] = v, 0) : -1; }
 
