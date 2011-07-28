@@ -100,17 +100,13 @@ D_PARSE(comb) {
 	return C_PARSE(all);
 }
 
-// for the assignment, accepts || and &&
-
 D_PARSE(pipe) {
-	if (*i++ != '|') --i;
 	if (t.back().args.empty()) return ERRSYN;
 	t.back().opt = PIPE;
 	return C_PARSE(all);
 }
 
 D_PARSE(jobs) {
-	if (*i++ != '&') --i;
 	if (t.back().args.empty()) return ERRSYN;
 	t.back().opt = JOBS;
 	return C_PARSE(all);
