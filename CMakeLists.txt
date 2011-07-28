@@ -1,6 +1,16 @@
 cmake_minimum_required(VERSION 2.6)
 project(ucsh)
 
+option(USE_HASH_MAP "Enables C++ TR1 Hashmap" ON)
+option(USE_HIST_FILE "Saves history to ~/.ucsh_hist" OFF)
+
+if (USE_HASH_MAP)
+	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DUSE_HASH_MAP")
+endif (USE_HASH_MAP)
+if (USE_HIST_FILE)
+	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DUSE_HIST_FILE")
+endif (USE_HIST_FILE)
+
 find_path(EDITLINE_INCLUDE_DIR histedit.h)
 find_library(EDITLINE_LIBRARY NAMES edit)
 
