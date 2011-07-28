@@ -34,9 +34,7 @@ namespace ucsh {
 #define C_PARSE(tok) \
 	(parse_##tok(i, t))
 #define C_PARSE_BUF(tok) \
-	(parse_##tok(i, t, move(b)))
-
-using std::move;
+	(parse_##tok(i, t, b))
 
 /*
  * parse_word(), parse_raw(), parse_str() consist the command-line
@@ -80,7 +78,7 @@ D_PARSE_BUF(word) {
 		if (c == '\'') return C_PARSE_BUF(raw);
 		if (c == '\"') return C_PARSE_BUF(str);
 		if (isterm(c)) {
-			t.back().args.push_back(move(b));
+			t.back().args.push_back(b);
 			return (--i, C_PARSE(all));
 		}
 		if (c == '$')
@@ -89,7 +87,7 @@ D_PARSE_BUF(word) {
 			// "\\\n" is a special terminator
 			if (c == '\\' and ((c = *i++) == '\n' or !c)) {
 				if (b.size())
-					t.back().args.push_back(move(b));
+					t.back().args.push_back(b);
 				return c ? C_PARSE(all) : CONT;
 			}
 			b.push_back(c);
@@ -122,13 +120,14 @@ D_PARSE(jobs) {
 D_PARSE(all) {
 	if (t.empty() or t.back().opt)
 		t.push_back(Command()); // new cmd
+	string b;
 	char c;
 	while ((c = *i++)) {
 		if (isspace(c)) continue;
 		if (c == ';' ) return C_PARSE(comb);
 		if (c == '|' ) return C_PARSE(pipe);
 		if (c == '&' ) return C_PARSE(jobs);
-		return (--i, C_PARSE(word));
+		return (--i, C_PARSE_BUF(word));
 	}
 	if (t.back().args.empty())
 		t.pop_back(); // clean up last cmd
@@ -162,18 +161,16 @@ char* parse_env(source_ref i) {
 	return Shell::getvar(s.c_str());
 }
 
-string_buf parse_var(source_ref i) {
-	string b;
+const char* parse_var(source_type i) {
+	static string b; // uses a static buffer
+	b.clear();
 	char c;
 	while ((c = *i++))
 		if (c == '$')
 			b.append(parse_env(i));
 		else b.push_back(c);
-	return move(b);
+	return b.c_str();
 }
-
-const char* parse_var(source_type&& i)
-{ return parse_var(i).c_str(); }
 
 }
 

@@ -2,8 +2,8 @@
 
 CXXDEPS := g++ -MM
 LDFLAGS :=  -ledit
-CXXFLAGS := -Wall -std=c++0x
-CXX := g++46
+CXXFLAGS := -Wall
+CXX := g++
 TAGS := exctags
 PROGRAM := ucsh
 
