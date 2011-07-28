@@ -140,13 +140,13 @@ D_PARSE(all) {
 #undef C_PARSE_BUF
 
 /*
- * parse_env() and parse_var() are not a part of the main parsing call
- * circle. They modify the pointer/iterator to notify their callers,
- * and return the partial results. Their callers are in charges to
- * merge there results to the AST.
+ * Neither parse_env() nor parse_var() is a part of the parsing circle.
  *
- * parse_var() is the interface. It parses and expends an environment
- * variable in the input.
+ * parse_env() modifies the input to notify its caller, and returns a
+ * partial result.
+ *
+ * parse_var() is an interface to non-parsing code. It parses and expends
+ * an environment variable in the input.
  */
 
 char* parse_env(source_ref i) {
