@@ -9,6 +9,8 @@
 #include "builtin.h"
 #include "shell.h"
 
+extern char** environ;
+
 namespace ucsh {
 namespace builtin {
 
@@ -52,8 +54,11 @@ D_CMD(quit) {
 // setenv does not print current environ when there is no args;
 // use the external env(1) command instead
 D_CMD(setenv) {
-	G_ARG(1, 2);
-	return ::setenv(argv[1], argc > 2 ? argv[2] : "", 1);
+	G_ARG(0, 2);
+	if (argc < 2)
+		for (char** ep = environ; *ep; ep++)
+			puts(*ep);
+	else return ::setenv(argv[1], argc > 2 ?  argv[2] : "", 1);
 }
 
 D_CMD(unsetenv) {
