@@ -8,7 +8,7 @@
 #ifndef PARSER_H_
 #define PARSER_H_
 
-#include "command.h"
+#include "shell.h"
 
 namespace ucsh {
 
@@ -20,8 +20,8 @@ typedef string&      string_buf;
 
 typedef enum { END, CONT, ERRTOK, ERRPAIR, ERRSYN } status_type;
 
-char*       parse_env  (source_ref);
-const char* parse_var  (source_type); // do not changes input
+cstr_t      parse_env  (source_ref);
+cstr_t      parse_var  (source_type); // do not changes input
 status_type parse_all  (source_ref, result_ref);
 status_type parse_word (source_ref, result_ref, string_buf);
 

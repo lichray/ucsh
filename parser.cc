@@ -6,7 +6,6 @@
  */
 
 #include "parser.h"
-#include "shell.h"
 
 namespace ucsh {
 
@@ -149,7 +148,7 @@ D_PARSE(all) {
  * an environment variable in the input.
  */
 
-char* parse_env(source_ref i) {
+cstr_t parse_env(source_ref i) {
 	string s;
 	char c = *i;
 	if (isdigit(c))
@@ -161,7 +160,7 @@ char* parse_env(source_ref i) {
 	return Shell::getvar(s.c_str());
 }
 
-const char* parse_var(source_type i) {
+cstr_t parse_var(source_type i) {
 	static string b; // uses a static buffer
 	b.clear();
 	char c;
