@@ -66,7 +66,7 @@ struct Shell {
 	static cstr_t getvar(cstr_t k) {
 		if (isdigit(*k)) {
 			argc_t c = atoi(k);
-			return c <= argc ? argv[c] : _ws;
+			return c < argc ? argv[c] : _ws;
 		}
 		if (vars.count(k))
 			return vars[k].c_str();
