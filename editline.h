@@ -21,9 +21,12 @@ namespace ucsh {
 struct EditLine {
 	EditLine(cstr_t prog) : el(el_init(prog, stdin, stdout, stderr)),
 			hl(history_init()), ev() {
+		history(hl, ev, H_SETSIZE, 1000);
+		history(hl, ev, H_SETUNIQUE, 1);
 		el_source(el, NULL);
 		el_set(el, EL_PROMPT, &EditLine::prompt);
 		el_set(el, EL_HIST, history, hl);
+		el_set(el, EL_SIGNAL, 1);
 #ifdef HIST_FILE
 		history(hl, ev, H_LOAD, HIST_FILE);
 #endif
