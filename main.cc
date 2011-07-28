@@ -49,10 +49,9 @@ int main(int argc, char* argv[]) {
 		}
 
 	if (!getenv("PS1"))
-		Shell::setenv("PS1", "$SHELL> ");
+		Shell::setenv("PS1", __M_NAME__ "> ");
 	if (!getenv("PS2"))
 		Shell::setenv("PS2", "? ");
-	Shell::setenv("SHELL", __M_NAME__);
 
 	return ucsh::main_loop();
 }
