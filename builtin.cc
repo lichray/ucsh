@@ -7,6 +7,7 @@
 
 #include <sys/param.h>
 #include "builtin.h"
+#include "shell.h"
 
 namespace ucsh {
 namespace builtin {
@@ -58,6 +59,16 @@ D_CMD(setenv) {
 D_CMD(unsetenv) {
 	G_ARG(1, 1);
 	return ::unsetenv(argv[1]);
+}
+
+D_CMD(set) {
+	G_ARG(1, 2);
+	return Shell::setvar(argv[1], argc > 2 ? argv[2] : "");
+}
+
+D_CMD(unset) {
+	G_ARG(1, 1);
+	return Shell::unsetvar(argv[1]);
 }
 
 #undef G_ARG

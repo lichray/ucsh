@@ -13,5 +13,6 @@ argc_t Shell::argc = 0;
 char** Shell::argv = NULL;
 cstr_t Shell::_ws  = "";
 Shell::cmds_t Shell::cmds;
+Shell::vars_t Shell::vars;
 
 }

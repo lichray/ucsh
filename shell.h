@@ -25,10 +25,10 @@
 namespace ucsh {
 
 struct Shell {
-#define _WS (const_cast<char*>(_ws))
 
 	typedef int (*cmd_ptr)(argc_t, argv_t);
 	typedef T_TABLE(cmd_ptr) cmds_t;
+	typedef T_TABLE(string) vars_t;
 
 	// initialize command-line options and built-ins
 	static void setup(argc_t c, argv_t v) {
@@ -40,6 +40,8 @@ struct Shell {
 		cmds["quit"] = builtin::quit;
 		cmds["setenv"] = builtin::setenv;
 		cmds["unsetenv"] = builtin::unsetenv;
+		cmds["set"] = builtin::set;
+		cmds["unset"] = builtin::unset;
 		cmds["q"] = builtin::quit; // alias
 	}
 
@@ -48,17 +50,25 @@ struct Shell {
 	{ return ::setenv(k, v, 1); }
 
 	// gets an environment variable, fallbacks to empty string
-	static char* getenv(cstr_t k) {
+	static cstr_t getenv(cstr_t k) {
 		char* v = ::getenv(k);
-		return v ? v : _WS;
+		return v ? v : _ws;
 	}
 
+	static int setvar(cstr_t k, cstr_t v)
+	{ return v ? (vars[k] = v, 0) : -1; }
+
+	static int unsetvar(cstr_t k)
+	{ return vars.erase(k) ? 0 : -1; }
+
 	// gets a shell variable, fallbacks to environment variable
-	static char* getvar(cstr_t k) {
+	static cstr_t getvar(cstr_t k) {
 		if (isdigit(*k)) {
 			argc_t c = atoi(k);
-			return c <= argc ? argv[c] : _WS;
+			return c <= argc ? argv[c] : _ws;
 		}
+		if (vars.count(k))
+			return vars[k].c_str();
 		return getenv(k);
 	}
 
@@ -70,12 +80,11 @@ struct Shell {
 	static int call(argc_t c, argv_t v)
 	{ return cmds[*v](c, v); }
 
-#undef _WS
-
 private:
 	static argc_t argc;
 	static char** argv;
 	static cmds_t cmds;
+	static vars_t vars;
 	static cstr_t  _ws;
 };
 
