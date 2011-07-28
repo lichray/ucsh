@@ -8,7 +8,7 @@
 #include "ucsh.h"
 
 #define __M_NAME__ "ucsh"
-#define __M_VERSION__ 1.0
+#define __M_VERSION__ "1.0"
 
 #define __M_BANNER__ \
 "                     _      \n"\
@@ -20,7 +20,7 @@
 
 #define __M_USAGE__ \
 __M_NAME__ " Copyright 2010 Zhihao Yuan <lichray@gmail.com> \n" \
-"Version: 1.0, date: 13 Oct 2010 \n" \
+"Version: " __M_VERSION__ ", date: 13 Oct 2010 \n" \
 "License: <http://www.freebsd.org/copyright/freebsd-license.html> \n\n" \
 "Usage:  ucsh [-hvVc] [CMD...]\n" \
 " -h      show help message\n" \
@@ -39,7 +39,7 @@ int main(int argc, char* argv[]) {
 			puts(__M_USAGE__);
 			return 0;
 		case 'v':
-			printf(__M_NAME__ " %.1f\n", __M_VERSION__);
+			puts(__M_NAME__ " " __M_VERSION__);
 			return 0;
 		case 'V':
 			puts(__M_BANNER__);
