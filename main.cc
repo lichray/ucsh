@@ -10,12 +10,6 @@
 #define __M_NAME__ "ucsh"
 #define __M_VERSION__ 1.0
 
-#ifdef USE_PWD_PS1
-	#define __M_PS1__ "$PWD> "
-#else
-	#define __M_PS1__ "$SHELL> "
-#endif
-
 #define __M_BANNER__ \
 "                     _      \n"\
 " _ __ ___  _   _ ___| |__   \n"\
@@ -57,8 +51,10 @@ int main(int argc, char* argv[]) {
 			exit(1);
 		}
 
-	Shell::setenv("PS1", __M_PS1__);
-	Shell::setenv("PS2", "? ");
+	if (!getenv("PS1"))
+		Shell::setenv("PS1", "$SHELL> ");
+	if (!getenv("PS2"))
+		Shell::setenv("PS2", "? ");
 	Shell::setenv("SHELL", __M_NAME__);
 
 	return ucsh::main_loop();
