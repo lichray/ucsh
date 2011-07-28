@@ -8,20 +8,17 @@
 #include "ucsh.h"
 
 #define __M_NAME__ "ucsh"
-#define __M_VERSION__ "1.0"
+#define __M_VERSION__ "1.1"
 
 #define __M_BANNER__ \
-"                     _      \n"\
-" _ __ ___  _   _ ___| |__   \n"\
-"| '_ ` _ \\| | | / __| '_ \\  \n"\
-"| | | | | | |_| \\__ \\ | | | \n"\
-"|_| |_| |_|\\__, |___/_| |_| \n"\
-"           |___/            \n"
+"                _     \n" \
+" _   _  ___ ___| |__  \n" \
+"| | | |/ __/ __| '_ \\ \n" \
+"| |_| | (__\\__ \\ | | |\n" \
+" \\__,_|\\___|___/_| |_|\n"
 
 #define __M_USAGE__ \
-__M_NAME__ " Copyright 2010 Zhihao Yuan <lichray@gmail.com> \n" \
-"Version: " __M_VERSION__ ", date: 13 Oct 2010 \n" \
-"License: <http://www.freebsd.org/copyright/freebsd-license.html> \n\n" \
+__M_NAME__ " " __M_VERSION__ " (zy) 2011/07/28\n" \
 "Usage:  ucsh [-hvVc] [CMD...]\n" \
 " -h      show help message\n" \
 " -v      show program version\n" \
