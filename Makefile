@@ -1,8 +1,8 @@
-# cxxconf CXX=g++45 CXXFLAGS+=-std=c++0x LDFLAGS+=-lreadline PROGRAM=ucsh
+# cxxconf
 
 CXXDEPS := g++ -MM
 LDFLAGS :=  -ledit
-CXXFLAGS := -Wall
+CXXFLAGS := -Wall -DUSE_HASH_MAP
 CXX := g++
 TAGS := exctags
 PROGRAM := ucsh
