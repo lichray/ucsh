@@ -46,7 +46,7 @@ D_CMD(exit) {
 	return 0;
 }
 
-D_CMD(quit) {
+D_CMD_(quit) {
 	G_ARG(0, 0); // quit command equals to exit 0
 	return (::exit(0), 0);
 }
@@ -79,6 +79,7 @@ D_CMD(unset) {
 
 #undef G_ARG
 #undef D_CMD
+#undef D_CMD_
 
 }}
 

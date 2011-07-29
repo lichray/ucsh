@@ -36,6 +36,7 @@ typedef char**const argv_t;
 namespace builtin {
 
 #define D_CMD(tok) int tok(argc_t argc, argv_t argv)
+#define D_CMD_(tok) int tok(argc_t argc, argv_t)
 
 D_CMD(cd);
 D_CMD(exec);
