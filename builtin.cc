@@ -51,8 +51,6 @@ D_CMD(quit) {
 	return (::exit(0), 0);
 }
 
-// setenv does not print current environ when there is no args;
-// use the external env(1) command instead
 D_CMD(setenv) {
 	G_ARG(0, 2);
 	if (argc < 2) {
