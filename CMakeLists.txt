@@ -1,8 +1,15 @@
 cmake_minimum_required(VERSION 2.6)
+include(CheckCXXSourceCompiles)
 project(ucsh)
 
-option(USE_HASH_MAP "Enables C++ TR1 Hashmap" ON)
-option(USE_HIST_FILE "Saves history to ~/.ucsh_hist" OFF)
+option(USE_HIST_FILE "Saves history to ~/.ucsh_hist" ON)
+
+check_cxx_source_compiles(
+	"#include <tr1/unordered_map>
+	int main() {
+		std::tr1::unordered_map<int, int> m;
+		return 0;
+	}" USE_HASH_MAP)
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall")
 if (USE_HASH_MAP)
