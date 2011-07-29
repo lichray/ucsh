@@ -26,9 +26,8 @@ __M_NAME__ " " __M_VERSION__ " (zy) 2011/07/28\n" \
 
 
 int main(int argc, char* argv[]) {
-	using ucsh::Shell;
 
-	Shell::setup(argc, argv);
+	ucsh::Shell::setup(argc, argv);
 	int ch;
 	while ((ch = getopt(argc, argv, "hvVc")) != -1)
 		switch (ch) {
