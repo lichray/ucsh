@@ -25,12 +25,22 @@ cstr_t      parse_var  (source_type); // do not changes input
 status_type parse_all  (source_ref, result_ref);
 status_type parse_word (source_ref, result_ref, string_buf);
 
-inline bool ismagic(const char c)
-{ return c == '*' or c == '?' or c == '[' or c == '\\'; }
+inline bool ismagic(const char c) {
+	switch (c) {
+	case '*': case '?': case '[': case '\\':
+		return true;
+	}
+	return false;
+}
 
-inline bool isterm(const char c)
-{ return c == ' ' or c == ';' or c == '|' or c == '&'
-	or c == '<' or c == '>' or !c; }
+inline bool isterm(const char c) {
+	switch (c) {
+	case ' ': case ';': case '|': case '&':
+	case '<': case '>': case '\0':
+		return true;
+	}
+	return false;
+}
 
 }
 
