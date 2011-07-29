@@ -42,11 +42,6 @@ struct Shell {
 		cmds["unsetenv"] = builtin::unsetenv;
 		cmds["set"] = builtin::set;
 		cmds["unset"] = builtin::unset;
-
-		if (!::getenv("PS1"))
-			setvar("PS1", "ucsh> ");
-		if (!::getenv("PS2"))
-			setvar("PS2", "? ");
 	}
 
 	// gets an environment variable, fallbacks to empty string

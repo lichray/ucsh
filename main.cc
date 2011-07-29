@@ -26,8 +26,9 @@ __M_NAME__ " " __M_VERSION__ " (zy) 2011/07/28\n" \
 
 
 int main(int argc, char* argv[]) {
+	using ucsh::Shell;
 
-	ucsh::Shell::setup(argc, argv);
+	Shell::setup(argc, argv);
 	int ch;
 	while ((ch = getopt(argc, argv, "hvVc")) != -1)
 		switch (ch) {
@@ -46,6 +47,11 @@ int main(int argc, char* argv[]) {
 			puts(__M_USAGE__);
 			exit(1);
 		}
+
+	if (!::getenv("PS1"))
+		Shell::setvar("PS1", __M_NAME__ "> ");
+	if (!::getenv("PS2"))
+		Shell::setvar("PS2", "? ");
 
 	return ucsh::main_loop();
 }
