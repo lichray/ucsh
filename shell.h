@@ -12,8 +12,6 @@
 #include "command.h"
 #include "builtin.h"
 
-// if your compiler does not support c++0x,
-// it won't help even it supports hash_map.
 #ifdef USE_HASH_MAP
 	#include <tr1/unordered_map>
 	#define T_TABLE(t) std::tr1::unordered_map<string, t>
