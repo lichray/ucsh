@@ -94,23 +94,11 @@ D_PARSE_BUF(word) {
 	}
 }
 
-D_PARSE(comb) {
-	if (t.back().args.empty()) return ERRSYN;
-	t.back().opt = COMB;
-	return C_PARSE(all);
-}
-
-D_PARSE(pipe) {
-	if (t.back().args.empty()) return ERRSYN;
-	t.back().opt = PIPE;
-	return C_PARSE(all);
-}
-
-D_PARSE(jobs) {
-	if (t.back().args.empty()) return ERRSYN;
-	t.back().opt = JOBS;
-	return C_PARSE(all);
-}
+#define parse_op(op) do { \
+	if (t.back().args.empty()) return ERRSYN; \
+	t.back().opt = op; \
+	return C_PARSE(all); \
+} while(0)
 
 D_PARSE(all) {
 	if (t.empty() or t.back().opt)
@@ -119,9 +107,15 @@ D_PARSE(all) {
 	char c;
 	while ((c = *i++)) {
 		if (isspace(c)) continue;
-		if (c == ';' ) return C_PARSE(comb);
-		if (c == '|' ) return C_PARSE(pipe);
-		if (c == '&' ) return C_PARSE(jobs);
+		if (c == ';' ) parse_op(COMB);
+		if (c == '|' ) parse_op(PIPE);
+		if (c == '&' ) parse_op(JOBS);
+		if (c == '<' ) parse_op(RDR_R);
+		if (c == '>' )
+			if (*i == '>') {
+				++i;
+				parse_op(RDR_A);
+			} else parse_op(RDR_W);
 		return (--i, C_PARSE_BUF(word));
 	}
 	if (t.back().args.empty())

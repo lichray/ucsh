@@ -29,7 +29,8 @@ inline bool ismagic(const char c)
 { return c == '*' or c == '?' or c == '[' or c == '\\'; }
 
 inline bool isterm(const char c)
-{ return c == ' ' or c == ';' or c == '|' or c == '&' or !c; }
+{ return c == ' ' or c == ';' or c == '|' or c == '&'
+	or c == '<' or c == '>' or !c; }
 
 }
 

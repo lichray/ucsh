@@ -15,7 +15,7 @@ using std::vector;
 
 namespace ucsh {
 
-typedef enum { WORD, SINGLE, DOUBLE, COMB, PIPE, JOBS } symbol_type;
+typedef enum { NOOP, COMB, PIPE, JOBS, RDR_R, RDR_W, RDR_A } op_type;
 
 // the class that represents a command and it's tail operator
 struct Command {
@@ -23,10 +23,10 @@ struct Command {
 	typedef _Rep::iterator iterator;
 	typedef _Rep::const_iterator const_iterator;
 
-	Command() : args(_Rep()), opt(WORD) {}
+	Command() : args(_Rep()), opt(NOOP) {}
 
 	_Rep args;
-	symbol_type opt; // SINGLE & DOUBLE are not valid operators
+	op_type opt;
 };
 
 // inheriting from vector, warning under -Weffc++
