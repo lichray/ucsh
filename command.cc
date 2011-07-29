@@ -100,7 +100,7 @@ int ucsh::CommandGroup::execute() {
 				}
 			} else switch (i->opt) {
 			case JOBS:
-				printf("[%8d]\n", pid);
+				fprintf(stderr, "[%8d]\n", pid);
 				waitpid(pid, &wst, WNOHANG); // still need to wait
 				st = WEXITSTATUS(wst);
 				break;
