@@ -15,7 +15,8 @@ using std::vector;
 
 namespace ucsh {
 
-typedef enum { NOOP, COMB, PIPE, JOBS, RDR_R, RDR_W, RDR_A } op_type;
+// operators after PIPE are all binary
+typedef enum { NOOP, COMB, JOBS, PIPE, RDR_R, RDR_W, RDR_A } op_type;
 
 // the class that represents a command and it's tail operator
 struct Command {
@@ -34,14 +35,8 @@ struct CommandGroup : vector<Command> {
 	typedef vector<Command> _Base;
 
 	// checks whether these commands are well ended
-	bool integrated() const {
-		switch(this->back().opt) {
-		case NOOP: case COMB: case JOBS:
-			return true;
-		default:
-			return false;
-		}
-	}
+	bool integrated() const
+	{ return this->back().opt < PIPE; }
 
 	int execute();
 	int print();
