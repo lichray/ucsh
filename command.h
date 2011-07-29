@@ -10,6 +10,8 @@
 
 #include <vector>
 #include <iostream>
+#include <glob.h>
+
 using std::string;
 using std::vector;
 
@@ -40,6 +42,31 @@ struct CommandGroup : vector<Command> {
 
 	int execute();
 	int print();
+};
+
+struct Glob {
+	Glob() : _rep(), pathc(_rep.gl_pathc), matchc(_rep.gl_matchc),
+	offs(_rep.gl_offs), flags(_rep.gl_flags), pathv(_rep.gl_pathv) {}
+
+	int match(char const* pattern, int newflags = 0)
+	{ return glob(pattern, newflags, NULL, &_rep); }
+
+	int match(string const& pattern, int newflags = 0)
+	{ return match(pattern.c_str(), newflags); }
+
+	~Glob() throw() { globfree(&_rep); }
+
+private:
+	glob_t _rep;
+	Glob(Glob const&);
+	Glob& operator=(Glob&);
+
+public:
+	size_t& pathc;
+	size_t& matchc;
+	size_t& offs;
+	int&    flags;
+	char**& pathv;
 };
 
 // prints a Command with ostream like cout, without %opt

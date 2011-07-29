@@ -7,7 +7,6 @@
 
 #include "command.h"
 #include "shell.h"
-#include <glob.h>
 #include <errno.h>
 #include <sys/wait.h>
 #include <fcntl.h>
@@ -24,21 +23,19 @@ int ucsh::CommandGroup::execute() {
 	int ofd = 0;
 	for (iterator i = this->begin(); i != this->end(); ++i) {
 		st = 0;
-		glob_t cbuf;
+		Glob cbuf;
 		for (size_t j = 0; j < i->args.size(); ++j)
-			if (GLOB_NOMATCH == glob(i->args[j].c_str(),
+			if (GLOB_NOMATCH == cbuf.match(i->args[j],
 					GLOB_NOMAGIC | GLOB_TILDE |
-					(j ? GLOB_APPEND : 0), NULL, &cbuf)) {
-				// fails only when magic char has no match
-				globfree(&cbuf);
+					(j ? GLOB_APPEND : 0))) {
 				P_ERRF(i->args[0].c_str(), "No match");
 				st = 1;
 				break;
 			}
 		if (st) continue; // resume when glob fails
-		if (Shell::isbuiltin(*cbuf.gl_pathv))
+		if (Shell::isbuiltin(*cbuf.pathv))
 			// turn C call status to exit status
-			st = !!Shell::call(cbuf.gl_pathc, argv_t(cbuf.gl_pathv));
+			st = !!Shell::call(cbuf.pathc, argv_t(cbuf.pathv));
 		else {
 			int fd[2]; // initialize pipe
 			if (i->opt == PIPE and pipe(fd)) perror("pipe()");
@@ -57,20 +54,18 @@ int ucsh::CommandGroup::execute() {
 					dup2(ofd, 0);
 					close(ofd);
 				} else if (RDR_R <= i->opt and i->opt <= RDR_A) {
-					glob_t rbuf;
-					if (GLOB_NOMATCH == glob((++i)->args[0].c_str(),
-							GLOB_NOMAGIC | GLOB_TILDE,
-							NULL, &rbuf)) {
-						globfree(&rbuf);
+					Glob rbuf;
+					if (GLOB_NOMATCH == rbuf.match((++i)->args[0],
+							GLOB_NOMAGIC | GLOB_TILDE)) {
 						P_ERRF(i->args[0].c_str(), "No match");
 						exit(1);
 					}
-					if (i->args.size() > 1 or rbuf.gl_pathc > 1) {
-						P_ERRF(*cbuf.gl_pathv, "Too many targets");
+					if (i->args.size() > 1 or rbuf.pathc > 1) {
+						P_ERRF(*cbuf.pathv, "Too many targets");
 						exit(1);
 					}
 					int rf;
-					char* fn = *rbuf.gl_pathv;
+					char* fn = *rbuf.pathv;
 					switch ((i-1)->opt) {
 					case RDR_R:
 						if ((rf = open(fn, O_RDONLY)) < 0)
@@ -90,12 +85,11 @@ int ucsh::CommandGroup::execute() {
 						close(rf);
 					default:;
 					}
-					globfree(&rbuf);
 				}
-				if (execvp(*cbuf.gl_pathv, cbuf.gl_pathv)) {
+				if (execvp(*cbuf.pathv, cbuf.pathv)) {
 					if (errno == ENOENT) // "no fuch file" in $PATH
-						P_ERRF(*cbuf.gl_pathv, "Command not found");
-					else perror(*cbuf.gl_pathv);
+						P_ERRF(*cbuf.pathv, "Command not found");
+					else perror(*cbuf.pathv);
 					exit(1); // when exec failed
 				}
 			} else switch (i->opt) {
@@ -115,7 +109,6 @@ int ucsh::CommandGroup::execute() {
 				st = WEXITSTATUS(wst);
 			}
 		}
-		globfree(&cbuf);
 	}
 	return st;
 }
