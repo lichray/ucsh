@@ -1,0 +1,4 @@
+ucsh:bind -e
+ucsh:bind "^W" ed-delete-prev-word
+ucsh:bind -k up ed-search-prev-history
+ucsh:bind -k down ed-search-next-history
