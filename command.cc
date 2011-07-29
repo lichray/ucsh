@@ -63,14 +63,17 @@ int ucsh::CommandGroup::execute() {
 					else perror(*cbuf.gl_pathv);
 					exit(1); // when exec failed
 				}
-			} else if (i->opt == JOBS) {
+			} else switch (i->opt) {
+			case JOBS:
 				printf("[%8d]\n", pid);
 				waitpid(pid, &wst, WNOHANG); // still need to wait
 				st = WEXITSTATUS(wst);
-			} else if (i->opt == PIPE) {
+				break;
+			case PIPE:
 				ofd = fd[0];  // preserved old output
 				close(fd[1]); // send EOF to input
-			} else {
+				break;
+			default:
 				waitpid(pid, &wst, WCONTINUED);
 				st = WEXITSTATUS(wst);
 			}
