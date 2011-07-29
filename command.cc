@@ -46,7 +46,6 @@ int ucsh::CommandGroup::execute() {
 			if (pid < 0) perror("fork()");
 			else if (!pid) {
 				if (i->opt == PIPE and (i-1)->opt != PIPE) {
-					close(fd[0]);
 					dup2(fd[1], 1);
 					close(fd[1]);
 				} else if (i->opt == PIPE and (i-1)->opt == PIPE) {
@@ -55,7 +54,6 @@ int ucsh::CommandGroup::execute() {
 					dup2(fd[1], 1);
 					close(fd[1]);
 				} else if (i->opt != PIPE and (i-1)->opt == PIPE) {
-					close(fd[1]);
 					dup2(ofd, 0);
 					close(ofd);
 				} else if (RDR_R <= i->opt and i->opt <= RDR_A) {
