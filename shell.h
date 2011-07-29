@@ -73,6 +73,13 @@ struct Shell {
 		return getenv(k);
 	}
 
+	static int printvars() {
+		for (vars_t::const_iterator i = vars.begin();
+				i != vars.end(); ++i)
+			std::cout << i->first << '\t' << i->second << std::endl;
+		return 0;
+	}
+
 	// check whether it's a built-in command
 	static bool isbuiltin(cstr_t s)
 	{ return cmds.count(s); }

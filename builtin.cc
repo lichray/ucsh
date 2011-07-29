@@ -69,8 +69,9 @@ D_CMD(unsetenv) {
 }
 
 D_CMD(set) {
-	G_ARG(1, 2);
-	return Shell::setvar(argv[1], argc > 2 ? argv[2] : "");
+	G_ARG(0, 2);
+	return argc < 2 ? Shell::printvars() :
+		Shell::setvar(argv[1], argc > 2 ? argv[2] : "");
 }
 
 D_CMD(unset) {
