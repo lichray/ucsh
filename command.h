@@ -34,8 +34,14 @@ struct CommandGroup : vector<Command> {
 	typedef vector<Command> _Base;
 
 	// checks whether these commands are well ended
-	bool integrated() const
-	{ return this->back().opt != PIPE; } // the only binary opt
+	bool integrated() const {
+		switch(this->back().opt) {
+		case NOOP: case COMB: case JOBS:
+			return true;
+		default:
+			return false;
+		}
+	}
 
 	int execute();
 	int print();
