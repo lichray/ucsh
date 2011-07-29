@@ -55,10 +55,12 @@ D_CMD(quit) {
 // use the external env(1) command instead
 D_CMD(setenv) {
 	G_ARG(0, 2);
-	if (argc < 2)
+	if (argc < 2) {
 		for (char** ep = environ; *ep; ep++)
 			puts(*ep);
-	else return ::setenv(argv[1], argc > 2 ?  argv[2] : "", 1);
+		return 0;
+	}
+	return ::setenv(argv[1], argc > 2 ?  argv[2] : "", 1);
 }
 
 D_CMD(unsetenv) {

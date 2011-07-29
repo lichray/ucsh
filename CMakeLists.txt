@@ -4,6 +4,7 @@ project(ucsh)
 option(USE_HASH_MAP "Enables C++ TR1 Hashmap" ON)
 option(USE_HIST_FILE "Saves history to ~/.ucsh_hist" OFF)
 
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall")
 if (USE_HASH_MAP)
 	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DUSE_HASH_MAP")
 endif (USE_HASH_MAP)
