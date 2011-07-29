@@ -59,7 +59,8 @@ int ucsh::CommandGroup::execute() {
 				} else if (RDR_R <= i->opt and i->opt <= RDR_A) {
 					glob_t rbuf;
 					if (GLOB_NOMATCH == glob((++i)->args[0].c_str(),
-							GLOB_NOMAGIC | GLOB_TILDE, NULL, &rbuf)) {
+							GLOB_NOMAGIC | GLOB_TILDE,
+							NULL, &rbuf)) {
 						globfree(&rbuf);
 						P_ERRF(i->args[0].c_str(), "No match");
 						exit(1);
@@ -69,17 +70,21 @@ int ucsh::CommandGroup::execute() {
 						exit(1);
 					}
 					int rf;
+					char* fn = *rbuf.gl_pathv;
 					switch ((i-1)->opt) {
 					case RDR_R:
-						rf = open(*rbuf.gl_pathv, O_RDONLY);
+						if ((rf = open(fn, O_RDONLY)) < 0)
+							X_ERR(fn);
 						dup2(rf, 0);
 						close(rf);
 						break;
 					case RDR_W:
-						rf = creat(*rbuf.gl_pathv, 0666);
+						if ((rf = creat(fn, 0666)) < 0)
+							X_ERR(fn);
 						goto rdr_to;
 					case RDR_A:
-						rf = open(*rbuf.gl_pathv, O_WRONLY | O_APPEND);
+						if ((rf = open(fn, O_WRONLY | O_APPEND)) < 0)
+							X_ERR(fn);
 					rdr_to:
 						dup2(rf, 1);
 						close(rf);
