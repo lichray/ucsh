@@ -77,7 +77,7 @@ D_PARSE_BUF(word) {
 		if (c == '\'') return C_PARSE_BUF(raw);
 		if (c == '\"') return C_PARSE_BUF(str);
 		if (isterm(c)) {
-			t.back().args.push_back(b);
+			t.last().args.push_back(b);
 			return (--i, C_PARSE(all));
 		}
 		if (c == '$')
@@ -86,7 +86,7 @@ D_PARSE_BUF(word) {
 			// "\\\n" is a special terminator
 			if (c == '\\' and ((c = *i++) == '\n' or !c)) {
 				if (b.size())
-					t.back().args.push_back(b);
+					t.last().args.push_back(b);
 				return c ? C_PARSE(all) : CONT;
 			}
 			b.push_back(c);
@@ -95,14 +95,14 @@ D_PARSE_BUF(word) {
 }
 
 #define parse_op(op) do { \
-	if (t.back().args.empty()) return ERRSYN; \
-	t.back().opt = op; \
+	if (t.last().args.empty()) return ERRSYN; \
+	t.last().opt = op; \
 	return C_PARSE(all); \
 } while(0)
 
 D_PARSE(all) {
-	if (t.empty() or t.back().opt)
-		t.push_back(Command()); // new cmd
+	if (t.empty() or t.last().opt)
+		t.push(Command()); // new cmd
 	string b;
 	char c;
 	while ((c = *i++)) {
@@ -111,15 +111,16 @@ D_PARSE(all) {
 		if (c == '|' ) parse_op(PIPE);
 		if (c == '&' ) parse_op(JOBS);
 		if (c == '<' ) parse_op(RDR_R);
-		if (c == '>' )
+		if (c == '>' ) {
 			if (*i == '>') {
 				++i;
 				parse_op(RDR_A);
 			} else parse_op(RDR_W);
+		}
 		return (--i, C_PARSE_BUF(word));
 	}
-	if (t.back().args.empty())
-		t.pop_back(); // clean up last cmd
+	if (t.last().args.empty())
+		t.pop(); // clean up last cmd
 	return t.integrated() ? END : CONT;
 }
 
