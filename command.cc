@@ -12,16 +12,16 @@
 #include <fcntl.h>
 
 // print all unexpended commands, one command per line
-int ucsh::CommandGroup::print() {
-	for (iterator i = this->begin(); i != this->end(); ++i)
+int ucsh::print(CommandGroup& o) {
+	for (CommandGroup::iterator i = o.begin(); i != o.end(); ++i)
 		std::cout << *i;
 	return 0;
 }
 
-int ucsh::CommandGroup::execute() {
+int ucsh::execute(CommandGroup& o) {
 	int st, wst;
 	int ofd = 0;
-	for (iterator i = this->begin(); i != this->end(); ++i) {
+	for (CommandGroup::iterator i = o.begin(); i != o.end(); ++i) {
 		st = 0;
 		Glob cbuf;
 		for (size_t j = 0; j < i->args.size(); ++j)
@@ -103,7 +103,6 @@ int ucsh::CommandGroup::execute() {
 			case PIPE:
 				ofd = fd[0];  // preserved old output
 				close(fd[1]); // send EOF to input
-				break;
 			case RDR_R: case RDR_W: case RDR_A:
 				++i;
 			default:

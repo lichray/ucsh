@@ -111,16 +111,17 @@ D_PARSE(all) {
 		if (c == '|' ) parse_op(PIPE);
 		if (c == '&' ) parse_op(JOBS);
 		if (c == '<' ) parse_op(RDR_R);
-		if (c == '>' )
+		if (c == '>' ) {
 			if (*i == '>') {
 				++i;
 				parse_op(RDR_A);
 			} else parse_op(RDR_W);
+		}
 		return (--i, C_PARSE_BUF(word));
 	}
 	if (t.back().args.empty())
 		t.pop_back(); // clean up last cmd
-	return t.integrated() ? END : CONT;
+	return isintegrated(t) ? END : CONT;
 }
 
 #undef D_PARSE

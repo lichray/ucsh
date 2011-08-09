@@ -32,17 +32,13 @@ struct Command {
 	op_type opt;
 };
 
-// inheriting from vector, warning under -Weffc++
-struct CommandGroup : vector<Command> {
-	typedef vector<Command> _Base;
+typedef vector<Command> CommandGroup;
 
-	// checks whether these commands are well ended
-	bool integrated() const
-	{ return this->back().opt < PIPE; }
+inline bool isintegrated(CommandGroup const& o)
+{ return o.back().opt < PIPE; }
 
-	int execute();
-	int print();
-};
+int execute(CommandGroup&);
+int print(CommandGroup&);
 
 struct Glob {
 	Glob() : _rep(), pathc(_rep.gl_pathc), matchc(_rep.gl_matchc),
