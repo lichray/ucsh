@@ -103,7 +103,6 @@ int ucsh::execute(CommandGroup& o) {
 			case PIPE:
 				ofd = fd[0];  // preserved old output
 				close(fd[1]); // send EOF to input
-				break;
 			case RDR_R: case RDR_W: case RDR_A:
 				++i;
 			default:
