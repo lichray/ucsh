@@ -33,39 +33,15 @@ struct Command {
 };
 
 // inheriting from vector, warning under -Weffc++
-struct CommandGroup {
-	typedef vector<Command> _Rep;
-	typedef _Rep::iterator iterator;
-
-	CommandGroup() : lst() {}
+struct CommandGroup : vector<Command> {
+	typedef vector<Command> _Base;
 
 	// checks whether these commands are well ended
 	bool integrated() const
-	{ return last().opt < PIPE; }
+	{ return this->back().opt < PIPE; }
 
 	int execute();
 	int print();
-
-	_Rep::value_type& last()
-	{ return lst.back(); }
-
-	_Rep::value_type const& last() const
-	{ return lst.back(); }
-
-	bool empty() const
-	{ return lst.empty(); }
-
-	void push(_Rep::value_type const& v)
-	{ lst.push_back(v); }
-
-	void pop()
-	{ lst.pop_back(); }
-
-	iterator begin() { return lst.begin(); }
-	iterator end() { return lst.end(); }
-
-private:
-	_Rep lst;
 };
 
 struct Glob {

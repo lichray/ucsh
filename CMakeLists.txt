@@ -12,7 +12,7 @@ check_cxx_source_compiles(
 	}"
 	USE_HASH_MAP)
 
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -Weffc++")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra")
 if (USE_HASH_MAP)
 	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DUSE_HASH_MAP")
 endif (USE_HASH_MAP)
