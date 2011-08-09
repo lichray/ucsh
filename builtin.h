@@ -22,7 +22,7 @@ typedef char**const argv_t;
 #define P_ERR(s) (fputs((s ".\n"), stderr))
 #define P_ERRF(c, s) (fprintf(stderr, "%s: " s ".\n", c))
 #define P_ERRS(s) (fprintf(stderr, "%s: " s ".\n", __func__))
-#define X_ERR(s, x) do { perror(s); x(1); } while(0)
+#define X_ERR(s) do { perror(s); exit(1); } while(0)
 
 /*
  * A built-in command works like a main() function: it accepts

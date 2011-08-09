@@ -35,15 +35,13 @@ int ucsh::CommandGroup::execute() {
 		if (st) continue; // resume when glob fails
 		if (Shell::isbuiltin(*cbuf.pathv))
 			// turn C call status to exit status
-			st = !!Shell::call(cbuf.pathc, cbuf.pathv);
+			st = !!Shell::call(cbuf.pathc, argv_t(cbuf.pathv));
 		else {
 			int fd[2]; // initialize pipe
-			if (i->opt == PIPE and pipe(fd))
-				X_ERR("pipe()", return);
+			if (i->opt == PIPE and pipe(fd)) perror("pipe()");
 			pid_t pid = fork();
-			if (pid < 0)
-				X_ERR("fork()", return);
-			if (!pid) {
+			if (pid < 0) perror("fork()");
+			else if (!pid) {
 				if (i->opt == PIPE and (i-1)->opt != PIPE) {
 					dup2(fd[1], 1);
 					close(fd[1]);
@@ -71,17 +69,17 @@ int ucsh::CommandGroup::execute() {
 					switch ((i-1)->opt) {
 					case RDR_R:
 						if ((rf = open(fn, O_RDONLY)) < 0)
-							X_ERR(fn, exit);
+							X_ERR(fn);
 						dup2(rf, 0);
 						close(rf);
 						break;
 					case RDR_W:
 						if ((rf = creat(fn, 0666)) < 0)
-							X_ERR(fn, exit);
+							X_ERR(fn);
 						goto rdr_to;
 					case RDR_A:
 						if ((rf = open(fn, O_WRONLY | O_APPEND)) < 0)
-							X_ERR(fn, exit);
+							X_ERR(fn);
 					rdr_to:
 						dup2(rf, 1);
 						close(rf);
