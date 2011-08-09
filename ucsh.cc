@@ -34,7 +34,7 @@ int main_loop() {
 			case ERRTOK  : P_ERR("Unknown token");  break;
 			case ERRPAIR : P_ERR("Unpaired quote"); break;
 			case ERRSYN  : P_ERR("Syntax error");   break;
-			case END     : st = t.execute();
+			case END     : st = execute(t);
 		}
 		el.enter(hs.str().c_str());
 	}
@@ -52,7 +52,7 @@ int run_argv(argc_t argc, argv_t argv) {
 	}
 	source_type s = b.c_str();
 	if (parse_all(s, t) == END)
-		return t.execute();
+		return execute(t);
 	P_ERR("Unfinished command or Syntax error");
 	return 1;
 }
