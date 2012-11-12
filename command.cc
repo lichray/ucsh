@@ -44,15 +44,19 @@ int ucsh::execute(CommandGroup& o) {
 			if (pid < 0)
 				X_ERR("fork()", return);
 			if (!pid) {
-				if (i->opt == PIPE and (i-1)->opt != PIPE) {
+				bool backward = i != o.begin();
+				if (i->opt == PIPE and
+				    (not backward or (i-1)->opt != PIPE)) {
 					dup2(fd[1], 1);
 					close(fd[1]);
-				} else if (i->opt == PIPE and (i-1)->opt == PIPE) {
+				} else if (i->opt == PIPE and
+				    backward and (i-1)->opt == PIPE) {
 					dup2(ofd, 0);
 					close(ofd);
 					dup2(fd[1], 1);
 					close(fd[1]);
-				} else if (i->opt != PIPE and (i-1)->opt == PIPE) {
+				} else if (i->opt != PIPE and
+				    (not backward or (i-1)->opt == PIPE)) {
 					dup2(ofd, 0);
 					close(ofd);
 				} else if (RDR_R <= i->opt and i->opt <= RDR_A) {
